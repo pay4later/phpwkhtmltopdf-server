@@ -1,0 +1,24 @@
+{
+  "name": "pay4later/phpwkhtmltopdf-server",
+  "description": "",
+  "keywords": ["wkhtmltopdf", "php", "pdf", "html"],
+  "homepage": "https://github.com/pay4later/phpwkhtmltopdf-server",
+  "type": "project",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andrew Mackrodt",
+      "email": "andrew.mackrodt@pay4later.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "mikehaertl/phpwkhtmltopdf": "dev-master#d431bc9583e75772134c21a88a40d179f8c73cc6",
+    "php-di/php-di": "~5.0",
+    "zendframework/zend-config": "~2.5"
+  },
+  "autoload": {
+    "classmap": ["src/"]
+  }
+}
