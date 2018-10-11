@@ -1,0 +1,32 @@
+#!/usr/bin/env groovy
+
+properties([
+    [$class: 'BuildDiscarderProperty', strategy: [
+        $class: 'LogRotator',
+        numToKeepStr: '5',
+        daysToKeepStr: '5'
+    ]]
+])
+
+node {
+    try {
+        stage ('Checkout') {
+            sh 'printenv'
+            checkout scm
+            sh 'git clean -fdx'
+        }
+
+        stage ('Initialise') {
+            sh 'make docker-init'
+        }
+
+        stage ('Test') {
+            sh 'make docker-test'
+        }
+    } finally {
+        stage('Clean Up') {
+            sh 'docker-compose down --remove-orphans'
+            cleanWs()
+        }
+    }
+}

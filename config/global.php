@@ -4,7 +4,7 @@ use DI\Container;
 
 return [
     'wkhtmltopdf' => [
-        'binary' => '/usr/local/bin/wkhtmltopdf'
+        'binary' => 'wkhtmltopdf'
 
         /*  The following options are defaults:
             'print-media-type',
