@@ -6,6 +6,10 @@ GROUP_ID=$(shell id -g)
 init: composer.phar
 	php composer.phar install
 
+## Installs dependencies for production
+prod: composer.phar
+	php composer.phar install --no-dev --no-interaction --no-progress --optimize-autoloader
+
 ## Initializes the application using docker
 docker-init: docker-login
 	cp .env.example .env
