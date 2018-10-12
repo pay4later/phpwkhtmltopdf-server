@@ -1,0 +1,12 @@
+/.git/
+/bin/
+/composer.phar
+/config/local.php.dist
+/docker/
+/docker-compose.yaml
+/Dockerfile
+/Dockerpipe
+/examples/
+/tests/
+/.env.example
+/.env

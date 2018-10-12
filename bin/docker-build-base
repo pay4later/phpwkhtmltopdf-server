@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -ex
+
+DOCKERFILE_DIR=$1
+DOCKER_REPO=$2
+TAG_PREFIX=$3
+read -p "Enter version (e.g. 1.0.0): " TAG_VERSION
+
+DOCKER_TAG="docker.deko-dev.com/$DOCKER_REPO:$TAG_PREFIX-$TAG_VERSION"
+
+docker build \
+	-t $DOCKER_TAG \
+	$DOCKERFILE_DIR
+
+docker push $DOCKER_TAG

@@ -13,10 +13,14 @@
     }
   ],
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.6",
     "mikehaertl/phpwkhtmltopdf": "dev-master#d431bc9583e75772134c21a88a40d179f8c73cc6",
-    "php-di/php-di": "~5.0",
-    "zendframework/zend-config": "~2.5"
+    "php-di/php-di": "5.0.0",
+    "zendframework/zend-config": "2.5.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.7",
+    "guzzlehttp/guzzle": "^6.3"
   },
   "autoload": {
     "classmap": ["src/"]

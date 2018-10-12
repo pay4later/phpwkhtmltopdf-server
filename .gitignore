@@ -1,3 +1,5 @@
-config/local.php
-vendor/
-.idea/
+/config/local.php
+/vendor/
+/.idea/
+/composer.phar
+/.env
