@@ -1,11 +1,11 @@
 resource "aws_iam_instance_profile" "ecs_instance" {
-  name  = "internal-tools"
+  name  = "${local.namespace}"
   path  = "/"
   role  = "${aws_iam_role.ecs_instance.name}"
 }
 
 resource "aws_iam_role" "ecs_instance" {
-  name  = "ecs-internal-tools"
+  name  = "${local.namespace}"
 
   assume_role_policy = <<EOF
 {
@@ -27,7 +27,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "ecs_instance" {
-  name  = "ecs-internal-tools"
+  name  = "${local.namespace}"
   role  = "${aws_iam_role.ecs_instance.id}"
 
   policy = <<EOF

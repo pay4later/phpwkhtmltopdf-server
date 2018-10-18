@@ -17,7 +17,7 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 resource "aws_launch_configuration" "ecs_instance" {
-  name                        = "${local.namespace}"
+  name_prefix                 = "${local.namespace}-"
   image_id                    = "${data.aws_ami.latest_ecs_optimised.image_id}"
   instance_type               = "${var.ecs_instance_type}"
   security_groups             = ["${aws_security_group.ecs_instance.id}"]

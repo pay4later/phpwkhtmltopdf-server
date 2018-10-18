@@ -11,3 +11,5 @@ max_ec2_instances = 2
 acm_certificate_domain = "deko-dev.com"
 region = "eu-west-2"
 docker_image = "587025832112.dkr.ecr.eu-west-2.amazonaws.com/pdf-renderer:test3"
+min_task_count = "1"
+max_task_count = "2"

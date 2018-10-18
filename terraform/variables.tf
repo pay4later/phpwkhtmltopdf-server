@@ -25,8 +25,17 @@ variable ecs_instance_type {
 variable min_ec2_instances {
   description = "Minimum umber of EC2 instances that should be running in cluster"
 }
+
 variable max_ec2_instances {
   description = "Maximum number of EC2 instances that should be running in cluster"
+}
+
+variable min_task_count {
+  description = "Minimum number tasks that should be running in cluster"
+}
+
+variable max_task_count {
+  description = "Maximum number of tasks that should be running in cluster"
 }
 
 variable ssh_key_name {
@@ -39,6 +48,43 @@ variable desired_pdf_service_count {
 
 variable "acm_certificate_domain" {
   description = "Find the load balancer certifcate by domain name"
+}
+
+// Scaling options
+variable "scale-up-cooldown" {
+  type        = "string"
+  description = "Cooldown when scaling up the Apache workers"
+  default     = "60"
+}
+
+variable "scale-down-cooldown" {
+  type        = "string"
+  description = "Cooldown when scaling down the Apache workers"
+  default     = "120"
+}
+
+variable "cpu-high-threshold" {
+  type        = "string"
+  description = "Threshold when CloudWatch reports high CPU usage"
+  default     = "90"
+}
+
+variable "cpu-high-period" {
+  type        = "string"
+  description = "Period when CloudWatch checks for high CPU usage"
+  default     = "60"
+}
+
+variable "cpu-low-threshold" {
+  type        = "string"
+  description = "Threshold when CloudWatch reports low CPU usage"
+  default     = "20"
+}
+
+variable "cpu-low-period" {
+  type        = "string"
+  description = "Period when CloudWatch checks for low CPU usage"
+  default     = "60"
 }
 
 locals {
