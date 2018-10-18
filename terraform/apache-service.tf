@@ -2,21 +2,25 @@ data "aws_iam_role" "ecs_service_role" {
   name = "ecsServiceRole"
 }
 
-resource "aws_ecs_service" "pdf_service" {
+resource "aws_ecs_service" "apache_service" {
   name            = "${local.namespace}"
   cluster         = "${aws_ecs_cluster.cluster.id}"
-  task_definition = "${aws_ecs_task_definition.pdf_service.arn}"
+  task_definition = "${aws_ecs_task_definition.apache_service.arn}"
   desired_count   = "${var.desired_pdf_service_count}"
   iam_role        = "${data.aws_iam_role.ecs_service_role.arn}"
 
   load_balancer {
-    target_group_arn = "${aws_alb_target_group.pdf_service_target_group.arn}"
+    target_group_arn = "${aws_alb_target_group.apache_service_target_group.arn}"
     container_name   = "${local.namespace}"
     container_port   = "80"
   }
+
+  depends_on      = [
+    "aws_alb_listener.apache_service"
+  ]
 }
 
-resource "aws_ecs_task_definition" "pdf_service" {
+resource "aws_ecs_task_definition" "apache_service" {
   family        = "${local.namespace}"
   container_definitions = <<EOF
 [
@@ -33,7 +37,7 @@ resource "aws_ecs_task_definition" "pdf_service" {
       "memoryReservation": null,
       "image": "${var.docker_image}",
       "essential": true,
-      "name": "${local.namespace}"
+      "name": "${local.project}"
     }
 ]
 EOF
@@ -44,23 +48,24 @@ data "aws_acm_certificate" "web" {
   statuses = ["ISSUED"]
 }
 
-resource "aws_alb_listener" "pdf_service" {
+resource "aws_alb_listener" "apache_service" {
   load_balancer_arn = "${aws_alb.web.arn}"
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
   certificate_arn   = "${data.aws_acm_certificate.web.arn}"
+
+  default_action {
+    target_group_arn = "${aws_alb_target_group.apache_service_target_group.arn}"
+    type             = "forward"
+  }
+
   depends_on      = [
     "aws_alb.web"
   ]
-
-  default_action {
-    target_group_arn = "${aws_alb_target_group.pdf_service_target_group.arn}"
-    type             = "forward"
-  }
 }
 
-resource "aws_alb_target_group" "pdf_service_target_group" {
+resource "aws_alb_target_group" "apache_service_target_group" {
   name = "${local.namespace}"
   port     = "80"
   protocol = "HTTP"

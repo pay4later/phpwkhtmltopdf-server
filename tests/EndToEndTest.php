@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class EndToEndTest extends TestCase
 {
-    private $baseUrl = 'https://pdf.deko-dev.com/';
+    private $baseUrl = 'http://app/';
 
     /** @var Client */
     private $client;
