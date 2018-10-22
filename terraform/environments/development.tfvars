@@ -1,7 +1,7 @@
 vpc_name = "vpc-07349ae4f80b61842"
 route53_zone_name = "deko-dev.com"
 domain = "pdf.deko-dev.com"
-ecs_instance_type = "t2.micro"
+ecs_instance_type = "t3.micro"
 ssh_key_name = "master-development"
 min_ec2_instances = 1
 max_ec2_instances = 2
