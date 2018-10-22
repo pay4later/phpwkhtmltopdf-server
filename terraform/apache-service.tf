@@ -59,10 +59,6 @@ resource "aws_alb_listener" "apache_service" {
     target_group_arn = "${aws_alb_target_group.apache_service_target_group.arn}"
     type             = "forward"
   }
-
-  depends_on      = [
-    "aws_alb.web"
-  ]
 }
 
 resource "aws_alb_target_group" "apache_service_target_group" {
