@@ -4,7 +4,7 @@ data "aws_ami" "latest_ecs_optimised" {
 
   filter {
     name   = "name"
-    values = ["amzn-ami-2018.03.g-amazon-ecs-optimized"]
+    values = ["amzn-ami-2018.03.h-amazon-ecs-optimized"]
   }
 }
 
