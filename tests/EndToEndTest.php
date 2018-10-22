@@ -5,13 +5,15 @@ use PHPUnit\Framework\TestCase;
 
 class EndToEndTest extends TestCase
 {
-    private $baseUrl = 'http://app/';
+    private $baseUrl;
 
     /** @var Client */
     private $client;
 
     public function setUp()
     {
+        $this->baseUrl = getenv('BASE_URL') ?: 'http://app/';
+
         $this->client = new Client([
             'base_uri' => $this->baseUrl,
         ]);

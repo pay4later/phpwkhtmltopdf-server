@@ -3,9 +3,9 @@ services:
 
   dev:
     image: docker.deko-dev.com/phpwkhtmltopdf-server/dev:5.6.38-cli-0.1.0
-    working_dir: /app
+    working_dir: /opt/phpwkhtmltopdf-server
     volumes:
-      - .:/app
+      - .:/opt/phpwkhtmltopdf-server
       - ~/.config/composer:/composer
       - ~/.cache/composer:/composer-cache
     env_file:
@@ -18,8 +18,9 @@ services:
 
   app:
     image: docker.deko-dev.com/phpwkhtmltopdf-server/base:5.6.38-apache-0.1.0
+    working_dir: /opt/phpwkhtmltopdf-server
     volumes:
-      - .:/app
+      - .:/opt/phpwkhtmltopdf-server
       - ./docker/apache-vhost.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php.ini:/usr/local/etc/php/conf.d/90-php.ini
     env_file:

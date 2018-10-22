@@ -2,7 +2,8 @@
 /bin/
 /composer.phar
 /config/local.php.dist
-/docker/
+/docker/base/
+/docker/dev/
 /docker-compose.yaml
 /Dockerfile
 /Dockerpipe
