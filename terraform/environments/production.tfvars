@@ -1,7 +1,7 @@
 vpc_name = "vpc-a69136c3"
 route53_zone_name = "dekopay.com"
-domain = "pdf.dekopay.com"
-ecs_instance_type = "t2.small"
+domain = "phpwkhtmltopdf-server.dekopay.com"
+ecs_instance_type = "t3.small"
 ssh_key_name = "master-eu-west-1"
 min_ec2_instances = 1
 max_ec2_instances = 2
