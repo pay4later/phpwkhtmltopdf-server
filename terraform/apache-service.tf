@@ -2,16 +2,19 @@ data "aws_iam_role" "ecs_service_role" {
   name = "ecsServiceRole"
 }
 
+locals {
+  container_name = "${local.project}"
+}
+
 resource "aws_ecs_service" "apache_service" {
   name            = "${local.namespace}"
   cluster         = "${aws_ecs_cluster.cluster.id}"
   task_definition = "${aws_ecs_task_definition.apache_service.arn}"
-  desired_count   = "${var.desired_pdf_service_count}"
   iam_role        = "${data.aws_iam_role.ecs_service_role.arn}"
 
   load_balancer {
     target_group_arn = "${aws_alb_target_group.apache_service_target_group.arn}"
-    container_name   = "${local.namespace}"
+    container_name   = "${local.container_name}"
     container_port   = "80"
   }
 
@@ -32,12 +35,11 @@ resource "aws_ecs_task_definition" "apache_service" {
           "containerPort": 80
         }
       ],
-      "cpu": 500,
-      "memory": 512,
-      "memoryReservation": null,
+      "cpu": ${var.task_cpu},
+      "memoryReservation": ${var.task_memory_reservation},
       "image": "${var.docker_image}",
       "essential": true,
-      "name": "${local.project}"
+      "name": "${local.container_name}"
     }
 ]
 EOF

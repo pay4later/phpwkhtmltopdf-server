@@ -11,10 +11,16 @@ resource "aws_autoscaling_group" "ecs_instance" {
     value               = "${local.namespace}"
     propagate_at_launch = true
   }
-  
+
   tag {
     key                 = "Environment"
     value               = "${terraform.workspace}"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Project"
+    value               = "${local.project}"
     propagate_at_launch = true
   }
 

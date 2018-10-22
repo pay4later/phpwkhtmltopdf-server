@@ -10,3 +10,5 @@ region = "eu-west-2"
 docker_image = "587025832112.dkr.ecr.eu-west-2.amazonaws.com/pdf-renderer:test3"
 min_task_count = 1
 max_task_count = 2
+task_cpu = 500
+task_memory_reservation = 750

@@ -34,7 +34,7 @@ docker-dev:
 
 ## Run tests
 test:
-	vendor/bin/phpunit tests/
+	vendor/bin/phpunit
 
 ## Run tests
 docker-test:

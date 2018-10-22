@@ -3,11 +3,11 @@ variable vpc_name {
 }
 
 variable "route53_zone_name" {
-  default = ""
+  description = "The DNS zone that var.domain is to be provisioned within"
 }
 
 variable "domain" {
-  default = ""
+  description = "The FQDN to point at the load balancer"
 }
 
 variable "region" {
@@ -19,7 +19,7 @@ variable "docker_image" {
 }
 
 variable ecs_instance_type {
-  default = "t2.small"
+  description = "Which ec2 instance type to use for the ECS cluster"
 }
 
 variable min_ec2_instances {
@@ -40,10 +40,6 @@ variable max_task_count {
 
 variable ssh_key_name {
   description = "Name of an existing SSH key for the EC2 instances in the cluster"
-}
-
-variable desired_pdf_service_count {
-  description = "desired number of running PDF service tasks"
 }
 
 variable "acm_certificate_domain" {
@@ -85,6 +81,14 @@ variable "cpu-low-period" {
   type        = "string"
   description = "Period when CloudWatch checks for low CPU usage"
   default     = "60"
+}
+
+variable "task_memory_reservation" {
+  description = "Soft memory reservation for ECS container in MB"
+}
+
+variable "task_cpu" {
+  description = "Soft CPU reservation for ECS container in CPU units (1024 = 1 cpu)"
 }
 
 locals {

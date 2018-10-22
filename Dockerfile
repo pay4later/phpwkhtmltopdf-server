@@ -9,3 +9,4 @@ COPY ./docker/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY ./docker/php.ini /usr/local/etc/php/conf.d/90-php.ini
 COPY . /opt/phpwkhtmltopdf-server
 
+WORKDIR /opt/phpwkhtmltopdf-server
