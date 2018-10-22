@@ -3,14 +3,18 @@ resource "aws_autoscaling_group" "ecs_instance" {
   name                      = "${aws_launch_configuration.ecs_instance.name}"
   min_size                  = "${var.min_ec2_instances}"
   max_size                  = "${var.max_ec2_instances}"
-  wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
   launch_configuration      = "${aws_launch_configuration.ecs_instance.name}"
-  min_elb_capacity          = "${var.min_ec2_instances}"
 
   tag {
     key                 = "Name"
     value               = "${local.namespace}"
+    propagate_at_launch = true
+  }
+  
+  tag {
+    key                 = "Environment"
+    value               = "${terraform.workspace}"
     propagate_at_launch = true
   }
 
