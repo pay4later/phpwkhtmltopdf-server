@@ -50,12 +50,12 @@ resource "aws_cloudwatch_metric_alarm" "ecs-instance-cpu-high" {
   alarm_name          = "${local.namespace}-cpu-high"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
-  metric_name         = "CPUReservation"
+  metric_name         = "CPUUtilization"
   namespace           = "AWS/ECS"
-  period              = "60"
+  period              = "${var.cpu-high-period}"
   statistic           = "Average"
-  threshold           = "90"
-  alarm_description   = "Monitors ec2 cpu for high reservation on ${local.namespace} ecs instances"
+  threshold           = "${var.cpu-high-threshold}"
+  alarm_description   = "Monitors ec2 cpu for high use on ${local.namespace} ecs instances"
 
   alarm_actions = [
     "${aws_autoscaling_policy.ecs_instance_scale_up.arn}",
@@ -70,12 +70,12 @@ resource "aws_cloudwatch_metric_alarm" "ecs-instance-cpu-low" {
   alarm_name          = "${local.namespace}-cpu-low"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = "2"
-  metric_name         = "CPUReservation"
+  metric_name         = "CPUUtilization"
   namespace           = "AWS/ECS"
-  period              = "60"
+  period              = "${var.cpu-low-period}"
   statistic           = "Average"
-  threshold           = "40"
-  alarm_description   = "Monitors ec2 cpu for low reservation on ${local.namespace} ecs instances"
+  threshold           = "${var.cpu-low-threshold}"
+  alarm_description   = "Monitors ec2 cpu for low use on ${local.namespace} ecs instances"
 
   alarm_actions = [
     "${aws_autoscaling_policy.ecs_instance_scale_down.arn}",
