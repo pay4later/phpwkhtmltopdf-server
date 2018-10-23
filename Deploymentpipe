@@ -1,0 +1,88 @@
+#!/usr/bin/env groovy
+
+properties([
+    buildDiscarder(
+        logRotator(
+            daysToKeepStr: '5',
+            numToKeepStr: '5'
+        )
+    ),
+    parameters([
+        string(name: 'TERRAFORM_BACKEND', trim: true),
+        string(name: 'TERRAFORM_WORKSPACE', trim: true),
+        string(name: 'DOCKER_REPO', trim: true),
+        string(name: 'REGION', trim: true)
+    ])
+])
+
+if (!params.TERRAFORM_BACKEND) {
+    error 'TERRAFORM_BACKEND parameter not defined'
+}
+
+if (!params.TERRAFORM_WORKSPACE) {
+    error 'TERRAFORM_WORKSPACE parameter not defined'
+}
+
+if (!params.DOCKER_REPO) {
+    error 'DOCKER_REPO parameter not defined'
+}
+
+if (!params.REGION) {
+    error 'REGION parameter not defined'
+}
+
+node {
+    try{
+        stage ('Checkout') {
+            sh 'printenv'
+            checkout scm
+            sh 'git clean -fdx'
+        }
+
+        def HASH = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+        def DOCKER_TAG = "${params.DOCKER_REPO}:${HASH}"
+
+        stage ('Build base') {
+           sh 'make docker-base'
+        }
+
+        stage ('Deps for deploy') {
+            sh 'cp .env.jenkins .env'
+            sh 'echo "LOCAL_USER_ID=$(id -u)" >> .env'
+            sh 'docker-compose down --remove-orphans'
+            sh 'docker-compose build'
+            withCredentials([string(credentialsId: 'github-oauth-token', variable: 'GITHUB_OAUTH_TOKEN')]) {
+                sh '''
+                    docker-compose run dev make composer.phar
+                    docker-compose run dev php composer.phar config github-oauth.github.com $GITHUB_OAUTH_TOKEN
+                    docker-compose run dev php composer.phar install --no-dev --no-progress --no-suggest --optimize-autoloader
+                '''
+            }
+        }
+
+        stage ('Build image') {
+            sh "docker build -t ${DOCKER_TAG} ."
+        }
+
+        stage ('Push image') {
+            sh "aws ecr get-login --no-include-email --region ${params.REGION} | /bin/bash"
+            sh "docker push ${DOCKER_TAG}"
+        }
+
+        stage ('Terraform') {
+            sh """
+                ./terraform.sh init -input=false -backend-config backends/${params.TERRAFORM_BACKEND}.tfvars
+                ./terraform.sh workspace new ${params.TERRAFORM_WORKSPACE} || true
+                ./terraform.sh workspace select ${params.TERRAFORM_WORKSPACE}
+
+                ./terraform.sh plan -var-file environments/${params.TERRAFORM_WORKSPACE}.tfvars -var docker_image=${DOCKER_TAG} -out=tfplan
+                ./terraform.sh apply -input=false -auto-approve 'tfplan'
+            """
+        }
+    } finally {
+        stage('Clean Up') {
+            sh 'docker-compose down --remove-orphans'
+            cleanWs()
+        }
+    }
+}
