@@ -10,4 +10,4 @@ region = "eu-west-1"
 min_task_count = 2
 max_task_count = 4
 task_cpu = 1000
-task_memory_reservation = 1500
+task_memory_reservation = 1000

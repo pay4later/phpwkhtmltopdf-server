@@ -31,7 +31,7 @@ node { ansiColor('xterm') { timestamps {
     }
 } } }
 
-if (env.BRANCH_NAME ==~ /^(master)$/) {
+if (env.BRANCH_NAME ==~ /^(master|add-deploy-pipeline)$/) {
     stage ('Deploy to Production') {
         build job: "Deploymentpipe/phpwkhtml-server/$BRANCH_NAME",
             parameters: [
