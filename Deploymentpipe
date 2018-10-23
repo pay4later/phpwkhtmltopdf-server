@@ -42,22 +42,12 @@ node {
         def HASH = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
         def DOCKER_TAG = "${params.DOCKER_REPO}:${HASH}"
 
-        stage ('Build base') {
-           sh 'make docker-base'
-        }
-
         stage ('Deps for deploy') {
-            sh 'cp .env.jenkins .env'
+            sh 'cp .env.example .env'
             sh 'echo "LOCAL_USER_ID=$(id -u)" >> .env'
             sh 'docker-compose down --remove-orphans'
-            sh 'docker-compose build'
-            withCredentials([string(credentialsId: 'github-oauth-token', variable: 'GITHUB_OAUTH_TOKEN')]) {
-                sh '''
-                    docker-compose run dev make composer.phar
-                    docker-compose run dev php composer.phar config github-oauth.github.com $GITHUB_OAUTH_TOKEN
-                    docker-compose run dev php composer.phar install --no-dev --no-progress --no-suggest --optimize-autoloader
-                '''
-            }
+            sh 'docker-compose run dev make composer.phar'
+            sh 'docker-compose run dev php composer.phar install --no-dev --no-progress --no-suggest --optimize-autoloader'
         }
 
         stage ('Build image') {
@@ -69,16 +59,14 @@ node {
             sh "docker push ${DOCKER_TAG}"
         }
 
-        stage ('Terraform') {
-            sh """
-                ./terraform.sh init -input=false -backend-config backends/${params.TERRAFORM_BACKEND}.tfvars
-                ./terraform.sh workspace new ${params.TERRAFORM_WORKSPACE} || true
-                ./terraform.sh workspace select ${params.TERRAFORM_WORKSPACE}
-
-                ./terraform.sh plan -var-file environments/${params.TERRAFORM_WORKSPACE}.tfvars -var docker_image=${DOCKER_TAG} -out=tfplan
-                ./terraform.sh apply -input=false -auto-approve 'tfplan'
-            """
+        stage ('Terraform Plan') {
+            sh "./bin/terraform-plan ${params.TERRAFORM_BACKEND} ${params.TERRAFORM_WORKSPACE} ${DOCKER_TAG}"
         }
+
+        stage ('Deploy') {
+            sh "./bin/deploy ${params.TERRAFORM_BACKEND} ${params.TERRAFORM_WORKSPACE}"
+        }
+
     } finally {
         stage('Clean Up') {
             sh 'docker-compose down --remove-orphans'

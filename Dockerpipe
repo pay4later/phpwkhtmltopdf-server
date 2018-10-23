@@ -31,9 +31,9 @@ node { ansiColor('xterm') { timestamps {
     }
 } } }
 
-if (env.BRANCH_NAME ==~ /^(master|add-deploy-pipeline)$/) {
+if (env.BRANCH_NAME ==~ /^(master)$/) {
     stage ('Deploy to Production') {
-        build job: "Deploymentpipe/phpwkhtml-server/$BRANCH_NAME",
+        build job: "Deploymentpipe/phpwkhtmltopdf-server/$BRANCH_NAME",
             parameters: [
                 string(name: 'TERRAFORM_BACKEND', value: 'production'),
                 string(name: 'TERRAFORM_WORKSPACE', value: 'production'),

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -ex
+
+TERRAFORM_BACKEND=${1}
+TERRAFORM_WORKSPACE=${2}
+
+./terraform.sh init \
+    -input=false \
+    -backend-config backends/${TERRAFORM_BACKEND}.tfvars
+
+./terraform.sh workspace select ${TERRAFORM_WORKSPACE} \
+    || ./terraform.sh workspace new ${TERRAFORM_WORKSPACE}
+
+./terraform.sh apply \
+    -input=false \
+    -auto-approve ${TERRAFORM_WORKSPACE}.tfplan

@@ -3,7 +3,7 @@
 TERRAFORM_VERSION="0.11.7"
 
 docker run --rm \
-    -v $(pwd)/terraform:/app/ -w /app/ \
+    -v $(pwd)/terraform:/opt/phpwkhtmltopdf-server/ -w /opt/phpwkhtmltopdf-server/ \
     -v ~/.aws:/.aws/ \
     -e AWS_PROFILE \
     -e AWS_ACCESS_KEY_ID \
