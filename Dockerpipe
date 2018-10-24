@@ -23,6 +23,7 @@ node { ansiColor('xterm') { timestamps {
         stage ('Test') {
             sh 'make docker-test'
         }
+
     } finally {
         stage('Clean Up') {
             sh 'docker-compose down --remove-orphans'
