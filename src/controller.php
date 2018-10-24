@@ -16,7 +16,7 @@ class controller
 
     public function dispatch()
     {
-        $options = isset($_POST['options']) ? $_POST['options'] : [];
+        $options = isset($_POST['options']) ? array_map('trim', $_POST['options']) : [];
         $this->pdf->setOptions($options);
         $pageCount = 0;
         $pages = isset($_POST['pages']) ? (array)$_POST['pages'] : [];
@@ -33,9 +33,10 @@ class controller
                 }
             }
 
-            $options = isset($page['options']) ? $page['options'] : [];
+            $options = isset($page['options']) ? array_map('trim', $page['options']) : [];
 
             if (!empty($page['content']) && !$contentVerified) {
+                $page['content'] = trim($page['content']);
                 if (!preg_match(Pdf::REGEX_HTML, $page['content'])) {
                     $this->abort('pages[#].content does not contain an <html tag');
                 }
