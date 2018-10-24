@@ -12,6 +12,8 @@ prod: composer.phar
 
 ## Initializes the application using docker
 docker-init: docker-login
+	mkdir -p ~/.config/composer
+	mkdir -p ~/.cache/composer
 	cp .env.example .env
 	docker-compose build
 	docker-compose run --rm -u $(USER_ID):$(GROUP_ID) dev make init
