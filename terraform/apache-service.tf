@@ -2,13 +2,17 @@ data "aws_iam_role" "ecs_service_role" {
   name = "ecsServiceRole"
 }
 
+data "aws_ecs_cluster" "cluster" {
+  cluster_name = "${var.cluster_name}"
+}
+
 locals {
   container_name = "${local.project}"
 }
 
 resource "aws_ecs_service" "apache_service" {
   name            = "${local.namespace}"
-  cluster         = "${aws_ecs_cluster.cluster.id}"
+  cluster         = "${data.aws_ecs_cluster.cluster.id}"
   task_definition = "${aws_ecs_task_definition.apache_service.arn}"
   iam_role        = "${data.aws_iam_role.ecs_service_role.arn}"
 
