@@ -6,6 +6,10 @@ variable cluster_name {
   description = "Name of existing cluster to register service with"
 }
 
+variable ecs_instance_security_group_id {
+  description = "ID of the clusters security group so associate with the load balancer"
+}
+
 variable "route53_zone_name" {
   description = "The DNS zone that var.domain is to be provisioned within"
 }

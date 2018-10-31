@@ -3,7 +3,7 @@ resource "aws_alb" "web" {
   internal        = false
   security_groups = [
     "${aws_security_group.load-balancer.id}",
-    "${aws_security_group.ecs_instance.id}",
+    "${var.ecs_instance_security_group_id}",
   ]
   subnets         = ["${data.aws_subnet_ids.public.ids}"]
   tags            = "${local.common_tags}"
