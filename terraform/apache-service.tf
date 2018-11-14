@@ -15,6 +15,7 @@ resource "aws_ecs_service" "apache_service" {
   cluster         = "${data.aws_ecs_cluster.cluster.id}"
   task_definition = "${aws_ecs_task_definition.apache_service.arn}"
   iam_role        = "${data.aws_iam_role.ecs_service_role.arn}"
+  desired_count   = "${var.min_task_count}"
 
   load_balancer {
     target_group_arn = "${aws_alb_target_group.apache_service_target_group.arn}"
