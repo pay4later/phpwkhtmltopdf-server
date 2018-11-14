@@ -32,3 +32,13 @@ resource "aws_security_group" "load-balancer" {
     ipv6_cidr_blocks = ["::/0"]
   }
 }
+
+resource "aws_security_group_rule" "lb-to-service" {
+  type = "ingress"
+  from_port   = 32768
+  to_port     = 65535
+  protocol    = "tcp"
+  source_security_group_id = "${aws_security_group.load-balancer.id}"
+  description = "Ephemeral port range for ${local.namespace}"
+  security_group_id = "${var.ecs_instance_security_group_id}"
+}

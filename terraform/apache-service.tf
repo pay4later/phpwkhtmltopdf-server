@@ -16,6 +16,8 @@ resource "aws_ecs_service" "apache_service" {
   task_definition = "${aws_ecs_task_definition.apache_service.arn}"
   iam_role        = "${data.aws_iam_role.ecs_service_role.arn}"
 
+  health_check_grace_period_seconds = 120
+
   load_balancer {
     target_group_arn = "${aws_alb_target_group.apache_service_target_group.arn}"
     container_name   = "${local.container_name}"
@@ -25,6 +27,10 @@ resource "aws_ecs_service" "apache_service" {
   depends_on      = [
     "aws_alb_listener.apache_service"
   ]
+
+  lifecycle {
+    ignore_changes = ["desired_count"]
+  }
 }
 
 resource "aws_ecs_task_definition" "apache_service" {
