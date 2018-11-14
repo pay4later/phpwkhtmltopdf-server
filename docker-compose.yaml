@@ -6,13 +6,13 @@ services:
     working_dir: /opt/phpwkhtmltopdf-server
     volumes:
       - .:/opt/phpwkhtmltopdf-server
-      - ~/.config/composer:/composer
-      - ~/.cache/composer:/composer-cache
+      - ~/.config/composer:/tmp/composer
+      - ~/.cache/composer:/tmp/composer-cache
     env_file:
         - .env
     environment:
-      COMPOSER_HOME: /composer
-      COMPOSER_CACHE_DIR: /composer-cache
+      COMPOSER_HOME: /tmp/composer
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
     links:
       - app
 

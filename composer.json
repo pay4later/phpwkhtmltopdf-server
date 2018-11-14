@@ -6,12 +6,6 @@
   "type": "project",
   "minimum-stability": "stable",
   "license": "MIT",
-  "authors": [
-    {
-      "name": "Andrew Mackrodt",
-      "email": "andrew.mackrodt@pay4later.com"
-    }
-  ],
   "require": {
     "php": ">=5.6",
     "mikehaertl/phpwkhtmltopdf": "dev-master#d431bc9583e75772134c21a88a40d179f8c73cc6",

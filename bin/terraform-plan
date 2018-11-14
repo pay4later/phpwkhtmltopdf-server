@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -ex
+
+TERRAFORM_BACKEND=${1}
+TERRAFORM_WORKSPACE=${2}
+DOCKER_TAG=${3}
+
+./terraform.sh init \
+    -input=false \
+    -backend-config backends/${TERRAFORM_BACKEND}.tfvars
+
+./terraform.sh workspace new ${TERRAFORM_WORKSPACE} || true
+./terraform.sh workspace select ${TERRAFORM_WORKSPACE}
+
+./terraform.sh plan \
+    -var-file environments/${TERRAFORM_WORKSPACE}.tfvars \
+    -var docker_image=${DOCKER_TAG} \
+    -out ${TERRAFORM_WORKSPACE}.tfplan

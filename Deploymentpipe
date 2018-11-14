@@ -1,0 +1,76 @@
+#!/usr/bin/env groovy
+
+properties([
+    buildDiscarder(
+        logRotator(
+            daysToKeepStr: '5',
+            numToKeepStr: '5'
+        )
+    ),
+    parameters([
+        string(name: 'TERRAFORM_BACKEND', trim: true),
+        string(name: 'TERRAFORM_WORKSPACE', trim: true),
+        string(name: 'DOCKER_REPO', trim: true),
+        string(name: 'REGION', trim: true)
+    ])
+])
+
+if (!params.TERRAFORM_BACKEND) {
+    error 'TERRAFORM_BACKEND parameter not defined'
+}
+
+if (!params.TERRAFORM_WORKSPACE) {
+    error 'TERRAFORM_WORKSPACE parameter not defined'
+}
+
+if (!params.DOCKER_REPO) {
+    error 'DOCKER_REPO parameter not defined'
+}
+
+if (!params.REGION) {
+    error 'REGION parameter not defined'
+}
+
+node {
+    try{
+        stage ('Checkout') {
+            sh 'printenv'
+            checkout scm
+            sh 'git clean -fdx'
+        }
+
+        def HASH = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+        def DOCKER_TAG = "${params.DOCKER_REPO}:${HASH}"
+
+        stage ('Deps for deploy') {
+            sh 'cp .env.example .env'
+            sh 'echo "LOCAL_USER_ID=$(id -u)" >> .env'
+            sh 'docker-compose down --remove-orphans'
+            sh 'docker-compose run dev make composer.phar'
+            sh 'docker-compose run dev php composer.phar install --no-dev --no-progress --no-suggest --optimize-autoloader'
+        }
+
+        stage ('Build image') {
+            sh "docker build -t ${DOCKER_TAG} ."
+        }
+
+        stage ('Push image') {
+            sh "aws ecr get-login --no-include-email --region ${params.REGION} | /bin/bash"
+            sh "docker push ${DOCKER_TAG}"
+        }
+
+        stage ('Terraform Plan') {
+            sh "./bin/terraform-plan ${params.TERRAFORM_BACKEND} ${params.TERRAFORM_WORKSPACE} ${DOCKER_TAG}"
+        }
+
+        stage ('Deploy') {
+            sh "./bin/deploy ${params.TERRAFORM_BACKEND} ${params.TERRAFORM_WORKSPACE}"
+        }
+
+    } finally {
+        stage('Clean Up') {
+            sh 'docker-compose down --remove-orphans'
+            cleanWs()
+        }
+    }
+}

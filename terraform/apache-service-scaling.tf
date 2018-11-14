@@ -4,7 +4,7 @@ module "service-scaling" {
   name                        = "${local.namespace}-apache"
   services-min                = "${var.min_task_count}"
   services-max                = "${var.max_task_count}"
-  ecs-cluster-name            = "${aws_ecs_cluster.cluster.name}"
+  ecs-cluster-name            = "${data.aws_ecs_cluster.cluster.cluster_name}"
   ecs-service-name            = "${aws_ecs_service.apache_service.name}"
   service-scale-up-cooldown   = "${var.scale-up-cooldown}"
   service-scale-down-cooldown = "${var.scale-down-cooldown}"

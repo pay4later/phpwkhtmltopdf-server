@@ -2,13 +2,17 @@ data "aws_iam_role" "ecs_service_role" {
   name = "ecsServiceRole"
 }
 
+data "aws_ecs_cluster" "cluster" {
+  cluster_name = "${var.cluster_name}"
+}
+
 locals {
   container_name = "${local.project}"
 }
 
 resource "aws_ecs_service" "apache_service" {
   name            = "${local.namespace}"
-  cluster         = "${aws_ecs_cluster.cluster.id}"
+  cluster         = "${data.aws_ecs_cluster.cluster.id}"
   task_definition = "${aws_ecs_task_definition.apache_service.arn}"
   iam_role        = "${data.aws_iam_role.ecs_service_role.arn}"
 
@@ -21,13 +25,16 @@ resource "aws_ecs_service" "apache_service" {
   depends_on      = [
     "aws_alb_listener.apache_service"
   ]
+
+  lifecycle {
+    ignore_changes = ["desired_count"]
+  }
 }
 
 resource "aws_ecs_task_definition" "apache_service" {
   family        = "${local.namespace}"
   container_definitions = <<EOF
 [
-
     {
       "portMappings": [
         {
@@ -39,7 +46,10 @@ resource "aws_ecs_task_definition" "apache_service" {
       "memoryReservation": ${var.task_memory_reservation},
       "image": "${var.docker_image}",
       "essential": true,
-      "name": "${local.container_name}"
+      "name": "${local.container_name}",
+      "dockerLabels": {
+        "com.datadoghq.ad.logs": "[{\"source\": \"apache\", \"service\": \"${local.project}\", \"tags\": [\"environment:${terraform.workspace}\"]}]"
+      }
     }
 ]
 EOF

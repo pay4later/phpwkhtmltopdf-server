@@ -2,6 +2,14 @@ variable vpc_name {
   description = "ID of existing VPC to use"
 }
 
+variable cluster_name {
+  description = "Name of existing cluster to register service with"
+}
+
+variable ecs_instance_security_group_id {
+  description = "ID of the clusters security group so associate with the load balancer"
+}
+
 variable "route53_zone_name" {
   description = "The DNS zone that var.domain is to be provisioned within"
 }
@@ -18,28 +26,12 @@ variable "docker_image" {
   description = "The image to use for the ECS Task Definition."
 }
 
-variable ecs_instance_type {
-  description = "Which ec2 instance type to use for the ECS cluster"
-}
-
-variable min_ec2_instances {
-  description = "Minimum umber of EC2 instances that should be running in cluster"
-}
-
-variable max_ec2_instances {
-  description = "Maximum number of EC2 instances that should be running in cluster"
-}
-
 variable min_task_count {
   description = "Minimum number tasks that should be running in cluster"
 }
 
 variable max_task_count {
   description = "Maximum number of tasks that should be running in cluster"
-}
-
-variable ssh_key_name {
-  description = "Name of an existing SSH key for the EC2 instances in the cluster"
 }
 
 variable "acm_certificate_domain" {
