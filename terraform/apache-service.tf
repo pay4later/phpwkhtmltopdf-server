@@ -35,7 +35,6 @@ resource "aws_ecs_task_definition" "apache_service" {
   family        = "${local.namespace}"
   container_definitions = <<EOF
 [
-
     {
       "portMappings": [
         {
@@ -47,7 +46,10 @@ resource "aws_ecs_task_definition" "apache_service" {
       "memoryReservation": ${var.task_memory_reservation},
       "image": "${var.docker_image}",
       "essential": true,
-      "name": "${local.container_name}"
+      "name": "${local.container_name}",
+      "dockerLabels": {
+        "com.datadoghq.ad.logs": "[{\"source\": \"apache\", \"service\": \"${local.project}\", \"tags\": [\"environment:${terraform.workspace}\"]}]"
+      }
     }
 ]
 EOF
