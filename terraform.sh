@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TERRAFORM_VERSION="0.11.7"
+TERRAFORM_VERSION="0.11.10"
 
 docker run --rm \
     -v $(pwd)/terraform:/opt/phpwkhtmltopdf-server/ -w /opt/phpwkhtmltopdf-server/ \
