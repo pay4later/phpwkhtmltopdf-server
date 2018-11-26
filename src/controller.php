@@ -61,6 +61,11 @@ class controller
             $this->abort('Missing pages[#].{uri,content}');
         }
 
+        // Library mikehaertl/php-tmpfile shows an undefined notice if HTTP_USER_AGENT is not set
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            $_SERVER['HTTP_USER_AGENT'] = "";
+        }
+
         if (!$this->pdf->send('download.pdf')) {
             $this->abort($this->pdf->getError(), '500 Internal Server Error');
         }
