@@ -8,7 +8,7 @@
   "license": "MIT",
   "require": {
     "php": ">=5.6",
-    "mikehaertl/phpwkhtmltopdf": "dev-master#d431bc9583e75772134c21a88a40d179f8c73cc6",
+    "mikehaertl/phpwkhtmltopdf": "2.3.1",
     "php-di/php-di": "5.0.0",
     "zendframework/zend-config": "2.5.1"
   },

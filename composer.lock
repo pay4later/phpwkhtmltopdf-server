@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cbed9417dab6d344feb490e475834b39",
+    "content-hash": "f6f7ed1060b1bec5e3ae6ba515cd9252",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -114,16 +114,16 @@
         },
         {
             "name": "mikehaertl/phpwkhtmltopdf",
-            "version": "dev-master",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikehaertl/phpwkhtmltopdf.git",
-                "reference": "d431bc9583e75772134c21a88a40d179f8c73cc6"
+                "reference": "45974cc1f0b99a8200aeedac6b692934a8a592cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikehaertl/phpwkhtmltopdf/zipball/d431bc9583e75772134c21a88a40d179f8c73cc6",
-                "reference": "d431bc9583e75772134c21a88a40d179f8c73cc6",
+                "url": "https://api.github.com/repos/mikehaertl/phpwkhtmltopdf/zipball/45974cc1f0b99a8200aeedac6b692934a8a592cd",
+                "reference": "45974cc1f0b99a8200aeedac6b692934a8a592cd",
                 "shasum": ""
             },
             "require": {
@@ -159,7 +159,7 @@
                 "wkhtmltoimage",
                 "wkhtmltopdf"
             ],
-            "time": "2015-07-21T12:43:21+00:00"
+            "time": "2018-02-18T10:54:00+00:00"
         },
         {
             "name": "php-di/invoker",
@@ -2132,9 +2132,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "mikehaertl/phpwkhtmltopdf": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
