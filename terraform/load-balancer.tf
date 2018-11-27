@@ -1,6 +1,6 @@
 resource "aws_alb" "web" {
   name            = "${local.namespace}"
-  internal        = false
+  internal        = true
   security_groups = [
     "${aws_security_group.load-balancer.id}",
   ]
