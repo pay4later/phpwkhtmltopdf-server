@@ -1,0 +1,11 @@
+acm_certificate_domain = "deko-uat.com"
+cluster_name = "staging-consul-dc874caa"
+domain = "pdf.deko-uat.com"
+ecs_instance_security_group_id = "sg-003e365d783ab76df"
+min_task_count = 1
+max_task_count = 2
+region = "eu-west-2"
+route53_zone_name = "deko-uat.com"
+task_cpu = 50
+task_memory_reservation = 256
+vpc_name = "vpc-dcda45b5"
