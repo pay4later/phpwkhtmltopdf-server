@@ -44,3 +44,29 @@ if (env.BRANCH_NAME ==~ /^(master)$/) {
             wait: true
     }
 }
+
+if (env.BRANCH_NAME ==~ /^(staging)$/) {
+    stage ('Deploy to Staging') {
+        build job: "Deploymentpipe/phpwkhtmltopdf-server/$BRANCH_NAME",
+            parameters: [
+                string(name: 'TERRAFORM_BACKEND', value: 'production'),
+                string(name: 'TERRAFORM_WORKSPACE', value: 'staging'),
+                string(name: 'DOCKER_REPO', value: '428466588005.dkr.ecr.eu-west-1.amazonaws.com/phpwkhtmltopdf-server'),
+                string(name: 'REGION', value: 'eu-west-1'),
+            ],
+            wait: true
+    }
+}
+
+if (env.BRANCH_NAME ==~ /^(develop)$/) {
+    stage ('Deploy to Development') {
+        build job: "Deploymentpipe/phpwkhtmltopdf-server/$BRANCH_NAME",
+            parameters: [
+                string(name: 'TERRAFORM_BACKEND', value: 'production'),
+                string(name: 'TERRAFORM_WORKSPACE', value: 'development'),
+                string(name: 'DOCKER_REPO', value: '428466588005.dkr.ecr.eu-west-1.amazonaws.com/phpwkhtmltopdf-server'),
+                string(name: 'REGION', value: 'eu-west-1'),
+            ],
+            wait: true
+    }
+}
