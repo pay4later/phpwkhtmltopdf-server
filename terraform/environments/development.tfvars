@@ -1,11 +1,11 @@
 acm_certificate_domain = "deko-dev.com"
-cluster_name = "development-internal-tools"
+cluster_name = "development-consul-8ec6cf57"
 domain = "pdf.deko-dev.com"
-ecs_instance_security_group_id = "sg-0be295ac40cdbd"
+ecs_instance_security_group_id = "sg-07705d0f55cafbc65"
 min_task_count = 1
 max_task_count = 2
 region = "eu-west-2"
 route53_zone_name = "deko-dev.com"
-task_cpu = 250
-task_memory_reservation = 375
+task_cpu = 50
+task_memory_reservation = 256
 vpc_name = "vpc-07349ae4f80b61842"

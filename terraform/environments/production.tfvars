@@ -1,12 +1,12 @@
 acm_certificate_domain = "dekopay.com"
-cluster_name = "production-internal-tools"
+cluster_name = "production-consul-cd62a19b"
 domain = "phpwkhtmltopdf-server.dekopay.com"
-ecs_instance_security_group_id = "sg-0be295ac402b4cdbd"
+ecs_instance_security_group_id = "sg-049a37beed14e48ad"
 min_task_count = 2
 max_task_count = 3
 region = "eu-west-1"
 route53_zone_name = "dekopay.com"
 ssh_key_name = "master-eu-west-1"
-task_cpu = 500
-task_memory_reservation = 750
+task_cpu = 50
+task_memory_reservation = 512
 vpc_name = "vpc-a69136c3"
