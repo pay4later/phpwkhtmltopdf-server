@@ -23,8 +23,8 @@ resource "aws_ecs_service" "apache_service" {
     container_port   = "80"
   }
 
-  depends_on      = [
-    "aws_alb_listener.apache_service"
+  depends_on = [
+    "aws_alb_listener.apache_service",
   ]
 
   lifecycle {
@@ -33,7 +33,8 @@ resource "aws_ecs_service" "apache_service" {
 }
 
 resource "aws_ecs_task_definition" "apache_service" {
-  family        = "${local.namespace}"
+  family = "${local.namespace}"
+
   container_definitions = <<EOF
 [
     {
@@ -75,12 +76,12 @@ resource "aws_alb_listener" "apache_service" {
 }
 
 resource "aws_alb_target_group" "apache_service_target_group" {
-  name = "${local.namespace}"
+  name     = "${local.namespace}"
   port     = "80"
   protocol = "HTTP"
   vpc_id   = "${data.aws_vpc.vpc.id}"
 
-  tags  = "${local.common_tags}"
+  tags = "${local.common_tags}"
 
   health_check {
     path                = "/healthcheck.html"
@@ -93,7 +94,7 @@ resource "aws_alb_target_group" "apache_service_target_group" {
     create_before_destroy = true
   }
 
-  depends_on      = [
-    "aws_alb.web"
+  depends_on = [
+    "aws_alb.web",
   ]
 }

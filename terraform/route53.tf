@@ -2,7 +2,6 @@ data "aws_route53_zone" "zone" {
   name = "${var.route53_zone_name}"
 }
 
-
 resource "aws_route53_record" "alb" {
   zone_id = "${data.aws_route53_zone.zone.zone_id}"
   name    = "${var.domain}"

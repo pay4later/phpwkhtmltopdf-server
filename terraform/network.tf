@@ -1,5 +1,5 @@
 data "aws_vpc" "vpc" {
-  id    = "${var.vpc_name}"
+  id = "${var.vpc_name}"
 }
 
 data "aws_subnet_ids" "private" {
