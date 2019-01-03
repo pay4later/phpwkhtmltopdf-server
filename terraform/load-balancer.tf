@@ -9,6 +9,12 @@ resource "aws_alb" "web" {
   subnets      = ["${data.aws_subnet_ids.public.ids}"]
   tags         = "${local.common_tags}"
   idle_timeout = 300
+
+  access_logs {
+    bucket  = "${aws_s3_bucket.access_logs.bucket}"
+    prefix  = "web"
+    enabled = true
+  }
 }
 
 resource "aws_security_group" "load-balancer" {
