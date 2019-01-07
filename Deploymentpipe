@@ -44,6 +44,7 @@ node {
 
         stage ('Deps for deploy') {
             sh 'cp .env.example .env'
+            sh 'make docker-login'
             sh 'echo "LOCAL_USER_ID=$(id -u)" >> .env'
             sh 'docker-compose down --remove-orphans'
             sh 'docker-compose run dev make composer.phar'
