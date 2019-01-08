@@ -59,7 +59,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   lambda_function {
     lambda_function_arn = "arn:aws:lambda:${var.region}:${data.aws_caller_identity.current.account_id}:function:${data.aws_lambda_function.ship_logs.function_name}"
     events              = ["s3:ObjectCreated:*"]
-    filter_prefix       = "AWSLogs/"
+    filter_prefix       = "web/AWSLogs/"
     filter_suffix       = ".log.gz"
   }
 
