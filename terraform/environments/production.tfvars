@@ -1,5 +1,5 @@
 acm_certificate_domain = "dekopay.com"
-cluster_name = "production-consul-cd62a19b"
+cluster_name = "production-consul-longarn-5e0a0c43"
 domain = "phpwkhtmltopdf-server.dekopay.com"
 ecs_instance_security_group_id = "sg-049a37beed14e48ad"
 min_task_count = 4
