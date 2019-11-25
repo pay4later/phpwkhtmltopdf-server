@@ -3,13 +3,18 @@ data "aws_route53_zone" "zone" {
 }
 
 resource "aws_route53_record" "alb" {
-  zone_id = "${data.aws_route53_zone.zone.zone_id}"
-  name    = "${var.domain}"
-  type    = "A"
+  zone_id        = "${data.aws_route53_zone.zone.zone_id}"
+  name           = "${var.domain}"
+  set_identifier = "ECS Cluster"
+  type           = "A"
 
   alias {
     name                   = "${aws_alb.web.dns_name}"
     zone_id                = "${aws_alb.web.zone_id}"
     evaluate_target_health = false
+  }
+
+  weighted_routing_policy {
+    weight = 0
   }
 }

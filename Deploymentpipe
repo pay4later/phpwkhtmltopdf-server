@@ -1,4 +1,6 @@
 #!/usr/bin/env groovy
+def HASH
+def DOCKER_TAG
 
 properties([
     buildDiscarder(
@@ -39,8 +41,9 @@ node {
             sh 'git clean -fdx'
         }
 
-        def HASH = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-        def DOCKER_TAG = "${params.DOCKER_REPO}:${HASH}"
+        HASH = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+        DOCKER_TAG = "${params.TERRAFORM_WORKSPACE}-${HASH}"
+        def DOCKER_IMAGE = "${params.DOCKER_REPO}:${DOCKER_TAG}"
 
         stage ('Deps for deploy') {
             sh 'cp .env.example .env'
@@ -52,16 +55,16 @@ node {
         }
 
         stage ('Build image') {
-            sh "docker build -t ${DOCKER_TAG} ."
+            sh "docker build -t ${DOCKER_IMAGE} ."
         }
 
         stage ('Push image') {
             sh "aws ecr get-login --no-include-email --region ${params.REGION} | /bin/bash"
-            sh "docker push ${DOCKER_TAG}"
+            sh "docker push ${DOCKER_IMAGE}"
         }
 
         stage ('Terraform Plan') {
-            sh "./bin/terraform-plan ${params.TERRAFORM_BACKEND} ${params.TERRAFORM_WORKSPACE} ${DOCKER_TAG}"
+            sh "./bin/terraform-plan ${params.TERRAFORM_BACKEND} ${params.TERRAFORM_WORKSPACE} ${DOCKER_IMAGE}"
         }
 
         stage ('Deploy') {
@@ -73,5 +76,41 @@ node {
             sh 'docker-compose down --remove-orphans'
             cleanWs()
         }
+    }
+}
+
+if (env.BRANCH_NAME ==~ /^(develop)$/) {
+    stage ('Deploy to Kubernetes') {
+        build job: "Kubepipe/phpwkhtmltopdf-server/$BRANCH_NAME",
+              parameters: [
+                      string(name: 'ARGOCD_APP', value: 'pdfserver'),
+                      string(name: 'K8S_NAMESPACE', value: 'develop'),
+                      string(name: 'DOCKER_IMAGE_TAG', value: "${DOCKER_TAG}")
+              ],
+              wait: true
+    }
+}
+
+if (env.BRANCH_NAME ==~ /^(staging)$/) {
+    stage ('Deploy to Kubernetes') {
+        build job: "Kubepipe/phpwkhtmltopdf-server/$BRANCH_NAME",
+              parameters: [
+                      string(name: 'ARGOCD_APP', value: 'pdfserver'),
+                      string(name: 'K8S_NAMESPACE', value: 'staging'),
+                      string(name: 'DOCKER_IMAGE_TAG', value: "${DOCKER_TAG}")
+              ],
+              wait: true
+    }
+}
+
+if (env.BRANCH_NAME ==~ /^(master)$/) {
+    stage ('Deploy to Kubernetes') {
+        build job: "Kubepipe/phpwkhtmltopdf-server/$BRANCH_NAME",
+              parameters: [
+                      string(name: 'ARGOCD_APP', value: 'pdfserver'),
+                      string(name: 'K8S_NAMESPACE', value: 'production'),
+                      string(name: 'DOCKER_IMAGE_TAG', value: "${DOCKER_TAG}")
+              ],
+              wait: true
     }
 }
