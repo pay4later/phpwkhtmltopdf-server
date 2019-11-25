@@ -1,7 +1,7 @@
 acm_certificate_domain = "dekopay.com"
 cluster_name = "production-consul-longarn-5e0a0c43"
 domain = "phpwkhtmltopdf-server.dekopay.com"
-ecs_instance_security_group_id = "sg-049a37beed14e48ad"
+ecs_instance_security_group_id = "sg-024806c9d8361af71"
 min_task_count = 4
 max_task_count = 6
 region = "eu-west-1"

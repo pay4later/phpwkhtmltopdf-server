@@ -1,7 +1,7 @@
 acm_certificate_domain = "deko-uat.com"
 cluster_name = "staging-consul-dc874caa"
 domain = "pdf.deko-uat.com"
-ecs_instance_security_group_id = "sg-003e365d783ab76df"
+ecs_instance_security_group_id = "sg-0a26117590ba70762"
 min_task_count = 1
 max_task_count = 2
 region = "eu-west-2"
