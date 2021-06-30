@@ -24,7 +24,7 @@ composer.phar:
 
 ## Login to our private docker repo
 docker-login:
-	docker login -u docker-readonly -p docker-readonly docker.deko-dev.com
+	aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 428466588005.dkr.ecr.eu-west-2.amazonaws.com
 
 ## Build the base container
 docker-base:
