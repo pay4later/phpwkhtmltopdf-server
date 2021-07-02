@@ -19,6 +19,7 @@ node('jenkins-k8s') {
                 }
 
                 stage ('Initialise') {
+                    sh 'aws --version'
                     sh 'make docker-init'
                 }
 
