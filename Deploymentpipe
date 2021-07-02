@@ -12,7 +12,8 @@ properties([
     parameters([
         string(name: 'TERRAFORM_BACKEND', trim: true),
         string(name: 'TERRAFORM_WORKSPACE', trim: true),
-        string(name: 'DOCKER_REPO', trim: true),
+        string(name: 'DOCKER_REGISTRY', trim: true),
+        string(name: 'IMAGE_NAME', trim: true),
         string(name: 'REGION', trim: true)
     ])
 ])
@@ -25,8 +26,12 @@ if (!params.TERRAFORM_WORKSPACE) {
     error 'TERRAFORM_WORKSPACE parameter not defined'
 }
 
-if (!params.DOCKER_REPO) {
-    error 'DOCKER_REPO parameter not defined'
+if (!params.DOCKER_REGISTRY) {
+    error 'DOCKER_REGISTRY parameter not defined'
+}
+
+if (!params.IMAGE_NAME) {
+    error 'IMAGE_NAME parameter not defined'
 }
 
 if (!params.REGION) {
@@ -34,7 +39,7 @@ if (!params.REGION) {
 }
 
 node {
-    try{
+    try {
         stage ('Checkout') {
             sh 'printenv'
             checkout scm
@@ -43,7 +48,7 @@ node {
 
         HASH = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
         DOCKER_TAG = "${params.TERRAFORM_WORKSPACE}-${HASH}"
-        def DOCKER_IMAGE = "${params.DOCKER_REPO}:${DOCKER_TAG}"
+        def DOCKER_IMAGE = "${params.DOCKER_REGISTRY}/${params.IMAGE_NAME}:${DOCKER_TAG}"
 
         stage ('Deps for deploy') {
             sh 'cp .env.example .env'
@@ -59,7 +64,7 @@ node {
         }
 
         stage ('Push image') {
-            sh "aws ecr get-login --no-include-email --region ${params.REGION} | /bin/bash"
+            sh "aws ecr get-login-password --region ${params.REGION} | docker login --username AWS --password-stdin ${params.DOCKER_REGISTRY}"
             sh "docker push ${DOCKER_IMAGE}"
         }
 
@@ -70,7 +75,6 @@ node {
         stage ('Deploy') {
             sh "./bin/deploy ${params.TERRAFORM_BACKEND} ${params.TERRAFORM_WORKSPACE}"
         }
-
     } finally {
         stage('Clean Up') {
             sh 'docker-compose down --remove-orphans'
