@@ -8,7 +8,7 @@ properties([
     ]]
 ])
 
-node {
+node('jenkins-k8s') {
     ansiColor('xterm') {
         timestamps {
             try {

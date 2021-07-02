@@ -38,7 +38,7 @@ if (!params.REGION) {
     error 'REGION parameter not defined'
 }
 
-node {
+node('jenkins-k8s') {
     try {
         stage ('Checkout') {
             sh 'printenv'
