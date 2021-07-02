@@ -1,4 +1,4 @@
-FROM docker.deko-dev.com/phpwkhtmltopdf-server/base:5.6.38-apache-0.1.0
+FROM 428466588005.dkr.ecr.eu-west-2.amazonaws.com/phpwkhtmltopdf-server/base:5.6.38-apache-0.1.0
 
 LABEL org.label-schema.schema-version="1.0" \
     org.label-schema.name="Web Server HTML to PDF Renderer" \

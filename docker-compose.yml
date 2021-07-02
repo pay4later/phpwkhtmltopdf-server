@@ -2,7 +2,7 @@ version: "2"
 services:
 
   dev:
-    image: 428466588005.dkr.ecr.eu-west-2.amazonaws.com/phpwkhtmltopdf-server/base
+    image: 428466588005.dkr.ecr.eu-west-2.amazonaws.com/phpwkhtmltopdf-server/base:5.6.38-apache-0.1.0
     working_dir: /opt/phpwkhtmltopdf-server
     volumes:
       - .:/opt/phpwkhtmltopdf-server
@@ -17,7 +17,7 @@ services:
       - app
 
   app:
-    image: 428466588005.dkr.ecr.eu-west-2.amazonaws.com/phpwkhtmltopdf-server/base
+    image: 428466588005.dkr.ecr.eu-west-2.amazonaws.com/phpwkhtmltopdf-server/base:5.6.38-apache-0.1.0
     working_dir: /opt/phpwkhtmltopdf-server
     volumes:
       - .:/opt/phpwkhtmltopdf-server
