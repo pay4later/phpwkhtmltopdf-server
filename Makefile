@@ -24,7 +24,7 @@ composer.phar:
 
 ## Login to our private docker repo
 docker-login:
-	aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 428466588005.dkr.ecr.eu-west-2.amazonaws.com
+	aws ecr get-login --no-include-email --region eu-west-2 | /bin/bash
 
 ## Build the base container
 docker-base:
