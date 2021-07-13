@@ -2,7 +2,7 @@ version: "2"
 services:
 
   dev:
-    image: docker.deko-dev.com/phpwkhtmltopdf-server/dev:5.6.38-cli-0.1.0
+    image: 428466588005.dkr.ecr.eu-west-2.amazonaws.com/phpwkhtmltopdf-server:5.6.38-cli
     working_dir: /opt/phpwkhtmltopdf-server
     volumes:
       - .:/opt/phpwkhtmltopdf-server
@@ -17,7 +17,7 @@ services:
       - app
 
   app:
-    image: docker.deko-dev.com/phpwkhtmltopdf-server/base:5.6.38-apache-0.1.0
+    image: 428466588005.dkr.ecr.eu-west-2.amazonaws.com/phpwkhtmltopdf-server:5.6.38-apache
     working_dir: /opt/phpwkhtmltopdf-server
     volumes:
       - .:/opt/phpwkhtmltopdf-server

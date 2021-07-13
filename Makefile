@@ -24,7 +24,7 @@ composer.phar:
 
 ## Login to our private docker repo
 docker-login:
-	docker login -u docker-readonly -p docker-readonly docker.deko-dev.com
+	aws ecr get-login --no-include-email --region eu-west-2 | /bin/bash
 
 ## Build the base container
 docker-base:

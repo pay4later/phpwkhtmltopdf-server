@@ -8,29 +8,33 @@ properties([
     ]]
 ])
 
-node { ansiColor('xterm') { timestamps {
-    try {
-        stage ('Checkout') {
-            sh 'printenv'
-            checkout scm
-            sh 'git clean -fdx'
-        }
+node('jenkins-k8s') {
+    ansiColor('xterm') {
+        timestamps {
+            try {
+                stage ('Checkout') {
+                    sh 'printenv'
+                    checkout scm
+                    sh 'git clean -fdx'
+                }
 
-        stage ('Initialise') {
-            sh 'make docker-init'
-        }
+                stage ('Initialise') {
+                    sh 'aws --version'
+                    sh 'make docker-init'
+                }
 
-        stage ('Test') {
-            sh 'make docker-test'
-        }
-
-    } finally {
-        stage('Clean Up') {
-            sh 'docker-compose down --remove-orphans'
-            cleanWs()
+                stage ('Test') {
+                    sh 'make docker-test'
+                }
+            } finally {
+                stage('Clean Up') {
+                    sh 'docker-compose down --remove-orphans'
+                    cleanWs()
+                }
+            }
         }
     }
-} } }
+}
 
 if (env.BRANCH_NAME ==~ /^(master)$/) {
     stage ('Deploy to Production') {
@@ -38,7 +42,8 @@ if (env.BRANCH_NAME ==~ /^(master)$/) {
             parameters: [
                 string(name: 'TERRAFORM_BACKEND', value: 'production'),
                 string(name: 'TERRAFORM_WORKSPACE', value: 'production'),
-                string(name: 'DOCKER_REPO', value: '428466588005.dkr.ecr.eu-west-1.amazonaws.com/phpwkhtmltopdf-server'),
+                string(name: 'DOCKER_REGISTRY', value: '428466588005.dkr.ecr.eu-west-1.amazonaws.com'),
+                string(name: 'IMAGE_NAME', value: 'phpwkhtmltopdf-server'),
                 string(name: 'REGION', value: 'eu-west-1'),
             ],
             wait: true
@@ -51,7 +56,8 @@ if (env.BRANCH_NAME ==~ /^(staging)$/) {
             parameters: [
                 string(name: 'TERRAFORM_BACKEND', value: 'production'),
                 string(name: 'TERRAFORM_WORKSPACE', value: 'staging'),
-                string(name: 'DOCKER_REPO', value: '428466588005.dkr.ecr.eu-west-1.amazonaws.com/phpwkhtmltopdf-server'),
+                string(name: 'DOCKER_REGISTRY', value: '428466588005.dkr.ecr.eu-west-1.amazonaws.com'),
+                string(name: 'IMAGE_NAME', value: 'phpwkhtmltopdf-server'),
                 string(name: 'REGION', value: 'eu-west-1'),
             ],
             wait: true
@@ -64,7 +70,8 @@ if (env.BRANCH_NAME ==~ /^(develop)$/) {
             parameters: [
                 string(name: 'TERRAFORM_BACKEND', value: 'production'),
                 string(name: 'TERRAFORM_WORKSPACE', value: 'development'),
-                string(name: 'DOCKER_REPO', value: '428466588005.dkr.ecr.eu-west-1.amazonaws.com/phpwkhtmltopdf-server'),
+                string(name: 'DOCKER_REGISTRY', value: '428466588005.dkr.ecr.eu-west-1.amazonaws.com'),
+                string(name: 'IMAGE_NAME', value: 'phpwkhtmltopdf-server'),
                 string(name: 'REGION', value: 'eu-west-1'),
             ],
             wait: true
